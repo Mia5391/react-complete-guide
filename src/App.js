@@ -6,9 +6,9 @@ import person from './Person/Person';
 class App extends Component {
     state = {
         persons: [
-            { name: 'Mia', age: 29 },
-            { name: 'Cosi', age: 32 },
-            { name: 'Bobby', age: 12 }
+            {id:'grnl',name: 'Mia', age: 29 },
+            {id:'fe', name: 'Cosi', age: 32 },
+            {id:'edw', name: 'Bobby', age: 12 }
         ],
         showPersons: false
     }
@@ -25,7 +25,18 @@ class App extends Component {
         });
     }
 
-    nameChangeHandler = (event) => {
+    nameChangeHandler = (event, id) => {
+        const personIndex = this.state.persons.findIndex(p =>{
+            return p.id === id;
+        });
+
+        const person = {...this.state.persons[personIndex]}; 
+
+        person.name = event.target.value;
+
+        const persons = [...this.state.persons];
+        persons[personIndex] = person;
+
         this.setState({
             persons: [
                 { name: 'Mia', age: 29 },
@@ -36,7 +47,8 @@ class App extends Component {
     }
 
     deletePersonHandler = (personIndex) => {
-        const persons = this.state.persons;
+        const persons = this.state.persons.slice(); //creates copy of array, as below:
+        //const persons = [...this.state.persons] - always update state in mutable fashion (create copy and edit that!)
         persons.splice(personIndex, 1);
         this.setState({persons:persons});
     }
@@ -63,7 +75,9 @@ class App extends Component {
                         return <Person 
                         click={() => this.deletePersonHandler(index)}
                         name={person.name}
-                        age= {person.age} />
+                        age= {person.age} 
+                        key={person.id}
+                        changed={(event)=>this.nameChangeHandler(event, person.id)}/>
                     })}
                 </div>
             );
