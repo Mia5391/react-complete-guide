@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
 import person from './Person/Person';
+import Radium, {StyleRoot} from 'radium';
 
 class App extends Component {
     state = {
@@ -63,7 +64,10 @@ class App extends Component {
             backgroundColor: 'green',
             font: 'inherit',
             borderRadius: '20px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            ':hover': {
+                backgroundColor: 'blue'
+            } //not valid JS, need to have ''
         };
 
         let persons = null;
@@ -81,11 +85,25 @@ class App extends Component {
                     })}
                 </div>
             );
+            style.backgroundColor = 'red'; //dynamically change colour
+            style[':hover'] = {
+                backgroundColor: 'yellow'
+            } 
         }
-        return (
-            <div className="App" >
+
+        const classes = [];
+        if (this.state.persons.length <= 2) {
+            classes.push('red');  //classes will be JUST red
+        }
+        if (this.state.persons.length <= 1) {
+            classes.push('bold'); //classes will be red AND bold
+        }
+
+        return ( //styleroot allows the use of media queries
+            <StyleRoot> 
+            <div className="App">
                 <h1> Hi, I'm still.. a person</h1>
-                <p>And I love...french fries!</p>
+                <p className={classes.join(' ')}>And I love...french fries!</p>
                 <button
                     style={style}
                     onClick={() => this.togglePersonsHandler()}>Toggle cards
@@ -94,9 +112,10 @@ class App extends Component {
                 {persons}
 
             </div>
+            </StyleRoot>
         );
         // return React.createElement('div', { className: 'App' }, React.createElement('h1', null, 'Hi, I\'m a COSI!!!!'));
     }
 }
 
-export default App;
+export default Radium(App);
