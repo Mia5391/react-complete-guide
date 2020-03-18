@@ -9,3 +9,14 @@
 .bold {
     font-weight: bold;
 }
+
+.button {
+    background-color:green;
+    font: inherit;
+    border-radius: 20px;
+    cursor: pointer; 
+}
+
+.button:hover {
+        background-color: yellow;
+}

@@ -1,18 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
-import styled from 'styled-components';
 import person from './Person/Person';
-
-//background colour changes according to condition, because THIS IS JAVASCRIPT!!
-const StyledButton = styled.button`
-background-color: ${props => props.alt? 'red' : 'green'}; 
-font: inherit;
-border-radius: 20px;
-cursor: pointer;
-    &:hover {
-    background-color: ${props => props.alt? 'blue' : 'yellow'};
-}`;
 
 class App extends Component {
     state = {
@@ -70,15 +59,6 @@ class App extends Component {
     }
 
     render() {
-        // const style = {
-        //     backgroundColor: 'green',
-        //     font: 'inherit',
-        //     borderRadius: '20px',
-        //     cursor: 'pointer',
-        //     ':hover': {
-        //         backgroundColor: 'blue'
-        //     } //not valid JS, need to have ''
-        // };
 
         let persons = null;
 
@@ -95,10 +75,6 @@ class App extends Component {
                     })}
                 </div>
             );
-            // style.backgroundColor = 'red'; //dynamically change colour
-            // style[':hover'] = {
-            //     backgroundColor: 'yellow'
-            // } 
         }
 
         const classes = [];
@@ -114,10 +90,10 @@ class App extends Component {
             <div className="App">
                 <h1> Hi, I'm still.. a person</h1>
                 <p className={classes.join(' ')}>And I love...french fries!</p>
-                <StyledButton alt={this.state.showPersons}
+                <button className="button"
                     // style={style}
                     onClick={() => this.togglePersonsHandler()}>Toggle cards
-                    </StyledButton>
+                    </button>
                 
                 {persons}
 
