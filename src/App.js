@@ -1,106 +1,92 @@
 import React, { Component } from 'react';
-import './App.css';
+
+import classes from './App.css';
 import Person from './Person/Person';
-import person from './Person/Person';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
     state = {
         persons: [
-            {id:'grnl',name: 'Mia', age: 29 },
-            {id:'fe', name: 'Cosi', age: 32 },
-            {id:'edw', name: 'Bobby', age: 12 }
+            { id: 'asfa1', name: 'Max', age: 28 },
+            { id: 'vasdf1', name: 'Manu', age: 29 },
+            { id: 'asdf11', name: 'Stephanie', age: 26 }
         ],
+        otherState: 'some other value',
         showPersons: false
-    }
+    };
 
-    switchNameHandler = (newName) => {
-        // console.log('Was clicked!');
-        // DO NOT DO THIS: this.state.persons[0].name='Changed Name';
-        this.setState({
-            persons: [
-                { name: 'Mia', age: 29 },
-                { name: 'Cosi', age: 32 },
-                { name: 'Bobby', age: 33 }
-            ]
-        });
-    }
-
-    nameChangeHandler = (event, id) => {
-        const personIndex = this.state.persons.findIndex(p =>{
+    nameChangedHandler = (event, id) => {
+        const personIndex = this.state.persons.findIndex(p => {
             return p.id === id;
         });
 
-        const person = {...this.state.persons[personIndex]}; 
+        const person = {
+            ...this.state.persons[personIndex]
+        };
+
+        // const person = Object.assign({}, this.state.persons[personIndex]);
 
         person.name = event.target.value;
 
         const persons = [...this.state.persons];
         persons[personIndex] = person;
 
-        this.setState({
-            persons: [
-                { name: 'Mia', age: 29 },
-                { name: event.target.value, age: 32 },
-                { name: 'Bobby', age: 33 }
-            ]
-        });
-    }
+        this.setState({ persons: persons });
+    };
 
-    deletePersonHandler = (personIndex) => {
-        const persons = this.state.persons.slice(); //creates copy of array, as below:
-        //const persons = [...this.state.persons] - always update state in mutable fashion (create copy and edit that!)
+    deletePersonHandler = personIndex => {
+        // const persons = this.state.persons.slice();
+        const persons = [...this.state.persons];
         persons.splice(personIndex, 1);
-        this.setState({persons:persons});
-    }
+        this.setState({ persons: persons });
+    };
 
     togglePersonsHandler = () => {
         const doesShow = this.state.showPersons;
         this.setState({ showPersons: !doesShow });
-    }
+    };
 
     render() {
-
         let persons = null;
+        let btnClass = '';
 
         if (this.state.showPersons) {
             persons = (
                 <div>
-                    {this.state.persons.map((person, index) =>{
-                        return <Person 
-                        click={() => this.deletePersonHandler(index)}
-                        name={person.name}
-                        age= {person.age} 
-                        key={person.id}
-                        changed={(event)=>this.nameChangeHandler(event, person.id)}/>
+                    {this.state.persons.map((person, index) => {
+                        return (<ErrorBoundary key={person.id}>
+                            <Person
+                                click={() => this.deletePersonHandler(index)}
+                                name={person.name}
+                                age={person.age}
+                                changed={event => this.nameChangedHandler(event, person.id)}
+                    /></ErrorBoundary>);
                     })}
                 </div>
             );
+
+            btnClass = classes.Red;
         }
 
-        const classes = [];
+        const assignedClasses = [];
         if (this.state.persons.length <= 2) {
-            classes.push('red');  //classes will be JUST red
+            assignedClasses.push(classes.red); // classes = ['red']
         }
         if (this.state.persons.length <= 1) {
-            classes.push('bold'); //classes will be red AND bold
+            assignedClasses.push(classes.bold); // classes = ['red', 'bold']
         }
 
-        return ( //styleroot allows the use of media queries
-
-            <div className="App">
-                <h1> Hi, I'm still.. a person</h1>
-                <p className={classes.join(' ')}>And I love...french fries!</p>
-                <button className="button"
-                    // style={style}
-                    onClick={() => this.togglePersonsHandler()}>Toggle cards
-                    </button>
-                
+        return (
+            <div className={classes.App}>
+                <h1>Hi, I'm a React App</h1>
+                <p className={assignedClasses.join(' ')}>This is really working!</p>
+                <button className={btnClass} onClick={this.togglePersonsHandler}>
+                    Toggle Persons
+        </button>
                 {persons}
-
             </div>
-
         );
-        // return React.createElement('div', { className: 'App' }, React.createElement('h1', null, 'Hi, I\'m a COSI!!!!'));
+        // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
     }
 }
 
