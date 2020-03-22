@@ -7,17 +7,26 @@ class PersonsList extends Component {
     //     console.log('Person.js getDerivedStateFromProps')
     //     return state;
     // }
-    shouldComponentUpdate(nextProps, nextState){
+    shouldComponentUpdate(nextProps, nextState) {
         console.log('PersonsList.js shouldComponentUpdate')
-        return true;
-    }
+        if (nextProps.persons !== this.props.persons ||
+            nextProps.changed !== this.props.changed ||
+            nextProps.clicked !== this.props.clicked) {
+            return true;
+        } else {
+            return false;
+        }
+    } //instead of the above, you can extend Pure Component, and it will perform the check for changes and render as appropriate
 
     getSnapshotBeforeUpdate(prevProps, prevState) {
         console.log('getSnapShotBeforeUpdate')
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         console.log('componentDidUpdate')
+    }
+    componentWillUnmount() {
+        console.log('PersonsList.js willUnmount')
     }
 
     render() {
@@ -25,14 +34,14 @@ class PersonsList extends Component {
         return this.props.persons.map((person, index) => {
             return (
                 <Person
-                key={person.id}
+                    key={person.id}
                     click={() => this.props.clicked(index)}
                     name={person.name}
                     age={person.age}
                     changed={event => this.props.changed(event, person.id)}
-            />);
+                />);
         });
-    }; 
+    };
 }
 
 

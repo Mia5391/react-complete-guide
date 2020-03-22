@@ -5,8 +5,8 @@ import Person from '../components/PersonsList/Person/Person';
 import PersonsList from '../components/PersonsList/PersonsList';
 import Cockpit from '../components/Cockpit/Cockpit';
 
-class App extends Component { 
-    constructor(props){
+class App extends Component {
+    constructor(props) {
         super(props);
         console.log('[App.js] constructor');
     }
@@ -18,7 +18,8 @@ class App extends Component {
             { id: 'asdf11', name: 'Stephanie', age: 26 }
         ],
         otherState: 'some other value',
-        showPersons: false
+        showPersons: false,
+        showCockpit: true
     };
 
     static getDerivedStateFromProps(props, state) {
@@ -26,8 +27,17 @@ class App extends Component {
         return state;
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log('App.js componentDidMount');
+    }
+
+    componentDidUpdate(){
+        console.log('App.js componentDidUpdate');
+    }
+
+    shouldComponentUpdate(nextProps, nextState){
+        console.log('App.js shouldComponentUpdate');
+        return true;
     }
 
     nameChangedHandler = (event, id) => {
@@ -68,24 +78,30 @@ class App extends Component {
 
         if (this.state.showPersons) {
             persons = (<PersonsList
-                        persons={this.state.persons}
-                        clicked={this.deletePersonHandler}
-                        changed={this.nameChangedHandler} />
+                persons={this.state.persons}
+                clicked={this.deletePersonHandler}
+                changed={this.nameChangedHandler} />
             );
         }
 
         return (
             <div className={classes.App}>
-                <Cockpit 
-                title={this.props.appTitle}
-                showPersons={this.state.showPersons}
-                persons={this.state.persons}
-                clicked={this.togglePersonsHandler}/>
+                <button onClick={() => {
+                    this.setState({ showCockpit: false });
+                }}>Remove Cockpit</button>
+                {this.state.showCockpit ? (
+                    <Cockpit
+                        title={this.props.appTitle}
+                        showPersons={this.state.showPersons}
+                        personsLength={this.state.persons.length}
+                        persons={this.state.persons}
+                        clicked={this.togglePersonsHandler} />
+                ) : null}
                 {persons}
             </div>
-                );
+        );
         // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
-            }
-        }
-        
-        export default App;
+    }
+}
+
+export default App;
