@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import Person from './Person/Person';
 
-class PersonsList extends Component {
+class PersonsList extends PureComponent {
     // static getDerivedStateFromProps(props,state){
     //     console.log('Person.js getDerivedStateFromProps')
     //     return state;
     // }
-    shouldComponentUpdate(nextProps, nextState) {
-        console.log('PersonsList.js shouldComponentUpdate')
-        if (nextProps.persons !== this.props.persons ||
-            nextProps.changed !== this.props.changed ||
-            nextProps.clicked !== this.props.clicked) {
-            return true;
-        } else {
-            return false;
-        }
-    } //instead of the above, you can extend Pure Component, and it will perform the check for changes and render as appropriate
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     console.log('PersonsList.js shouldComponentUpdate')
+    //     if (nextProps.persons !== this.props.persons ||
+    //         nextProps.changed !== this.props.changed ||
+    //         nextProps.clicked !== this.props.clicked) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    //} //instead of the above, you can extend Pure Component, and it will perform the check for changes and render as appropriate
 
     getSnapshotBeforeUpdate(prevProps, prevState) {
         console.log('getSnapShotBeforeUpdate')
@@ -39,6 +39,7 @@ class PersonsList extends Component {
                     name={person.name}
                     age={person.age}
                     changed={event => this.props.changed(event, person.id)}
+                    isAuth={this.props.isAuthenticated}
                 />);
         });
     };
